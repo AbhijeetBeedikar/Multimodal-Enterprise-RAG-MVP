@@ -3,7 +3,9 @@
 MVP multimodal RAG pipeline 
 
 # Running the code
-Run the command `pip install -e .` first
+Set your current working directory to the root
+
+Run the command `pip install -e .` 
 
 Run `!python3 main.py`
 
