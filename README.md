@@ -1,19 +1,94 @@
+# Multimodal Enterprise RAG
 
-📌 Multimodal Enterprise RAG System
+A multimodal Retrieval-Augmented Generation (RAG) system for enterprise applications.
 
-A complete Retrieval-Augmented Generation (RAG) pipeline capable of ingesting PDF, images, audio, building a Knowledge Graph, indexing multimodal content into Qdrant, and answering complex queries using a hybrid retrieval pipeline.
+## Prerequisites
 
-This project includes:
+- Python 3.8+
+- Google Colab (for Option 1)
+- Required Python packages (installed via setup)
 
-✔ Multimodal ingestion (PDF, images, audio)
-✔ Vector indexing using Qdrant
-✔ Knowledge graph extraction using Gemini
-✔ Graph search + vector search hybrid retrieval
-✔ Orchestrator for final prompting
-✔ LLM answering
-✔ Optional DeepEval evaluation
+## Setup
 
-🗂 Project Structure
+### Configuration
+
+Before running the code, you **must** update the API key:
+
+1. Navigate to `env.py`
+2. Replace the placeholder API key with your actual API key
+3. **Important**: The current key in `env.py` is a dummy placeholder and will not work
+
+### Directory Structure
+
+The root folder must be `multimodal_enterprise_rag`. 
+
+**Note**: In the provided code, the folder path is `/content/drive/MyDrive/AI_Projects/multimodal_enterprise_rag` because it was designed to run on Google Colab with files stored in Google Drive. Adjust this path according to your environment.
+
+## Running the Code
+
+### Option 1: Run the Colab Notebook
+
+This is the recommended approach if you're using Google Colab.
+
+1. Navigate to the `rag_system` folder
+2. Open `Copy of Enterprise_RAG.ipynb`
+3. Run all code blocks in sequential order
+4. Provide user input using the function format:
+   ```python
+   user_input(media_path, query)
+   ```
+
+### Option 2: Use the Python Files Directly
+
+This option allows you to use the RAG system as a Python package.
+
+#### Step 1: Install the package
+
+```python
+import os
+os.chdir("/root")
+!pip install -e .
+```
+
+#### Step 2: Configure the Python path
+
+```python
+import os
+import sys
+os.chdir("/root")
+sys.path.append("/root")
+```
+
+#### Step 3: Import and run
+
+```python
+import importlib 
+import rag_system.main as main 
+importlib.reload(main) 
+main.user_input(media_path, query)
+```
+
+## Usage
+
+The main interface is through the `user_input()` function:
+
+```python
+user_input(media_path, query)
+```
+
+**Parameters:**
+- `media_path`: Path to the media file(s) you want to process
+- `query`: Your question or query string
+
+## Troubleshooting
+
+- **Import errors**: Ensure you've run the setup commands in the correct order
+- **API errors**: Verify your API key in `env.py` is valid and active
+- **Path errors**: Confirm the root directory matches your environment setup
+
+## Project Structure
+
+```
 multimodal_enterprise_rag/
 │
 ├── rag_system/
@@ -22,162 +97,14 @@ multimodal_enterprise_rag/
 │   ├── graph/
 │   ├── retrieval/
 │   ├── main.py
-│   └── env.py
+│   ├── env.py
+│   └── Copy of Enterprise_RAG.ipynb
 │
 ├── setup.py
 ├── requirements.txt
 └── README.md
+```
 
-🚀 Running the Project
+## Support
 
-There are two ways to run this project.
-
-✅ Option 1 — Run Using the Colab Notebook
-
-This is the easiest way.
-
-Steps
-
-Open the provided Colab notebook:
-Enterprise_RAG.ipynb
-
-Ensure your directory structure is:
-
-/content/drive/MyDrive/AI_Projects/multimodal_enterprise_rag
-
-or change it accordingly so that the root directory is equivalent to this
-
-
-Inside rag_system/env.py, update your Google API key:
-
-def key():
-    return "YOUR_GEMINI_API_KEY"
-
-
-Run all cells in order.
-
-The main function to test your system is:
-
-user_input(media_path, query)
-
-
-Example:
-
-user_input(
-    "/content/drive/MyDrive/AI_Projects/multimodal_enterprise_rag/rag_system/ingestion/data/sample.pdf",
-    "Summarize the document"
-)
-
-✅ Option 2 — Install and Run the Package Manually
-Step 1: Install your project as a package
-
-Run this from the project root:
-
-import os
-os.chdir("/root")
-!pip install -e .
-
-
-This installs the rag_system module.
-
-Step 2: Ensure Python can import the package
-import os
-import sys
-
-os.chdir("/root")
-sys.path.append("/root")
-
-Step 3: Run the main RAG pipeline
-import importlib
-import rag_system.main as main
-
-importlib.reload(main)
-
-main.user_input(media_path, query)
-
-
-Example:
-
-main.user_input("/root/rag_system/ingestion/data/image.png", "What does this image contain?")
-
-📥 Usage
-
-Use the main entry point:
-
-user_input(media_path, query)
-
-
-Example queries:
-
-"Extract all entities from this PDF"
-
-"Who founded the company described in the image?"
-
-"Summarize the audio file"
-
-"What does the graph say about Acme Corp?"
-
-🧪 DeepEval Evaluation (Optional)
-
-To evaluate your RAG system:
-
-from deepeval import evaluate
-from deepeval.metrics import FaithfulnessMetric
-from deepeval.models.gemini import GeminiModel
-
-metric = FaithfulnessMetric(model=GeminiModel())
-score = metric.measure(prediction="your system output", context=["context docs"])
-
-print(score)
-
-🔑 API Keys
-
-Make sure you update:
-
-rag_system/env.py
-
-
-With your:
-
-Google Gemini API key
-
-def key():
-    return "YOUR_REAL_GEMINI_KEY"
-
-📌 Notes
-
-Qdrant must not be opened by multiple clients simultaneously.
-
-If using Colab, keep your Qdrant data folder inside /content, not Google Drive, to avoid locking issues.
-
-main.py handles:
-✔ ingestion
-✔ vector indexing
-✔ graph building
-✔ hybrid search
-✔ prompt construction
-✔ final LLM answer
-
-🎯 Final Output
-
-Running:
-
-user_input(media_path, query)
-
-
-Triggers the entire RAG backend, including:
-
-Ingestion
-
-Embedding + Vector Indexing
-
-Knowledge Graph Extraction
-
-Hybrid Search (Graph + Vector + Keywords)
-
-Prompt Construction
-
-LLM Response
-
-
-
+For issues or questions, please refer to the project documentation or open an issue in the repository.
